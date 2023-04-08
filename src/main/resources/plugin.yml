@@ -1,0 +1,11 @@
+name: FinnouTools
+version: '${project.version}'
+main: fr.lordfinn.finnoutools.FinnouTools
+api-version: 1.19
+commands:
+  simulateClick:
+    description: Simule un clic droit aux coordonnées spécifiées
+    usage: /simulateclick <posX> <posY> <posZ>
+  brushToPattern:
+    description: Applique le brush en main sur les blocs selectionés par la section worldedit
+    usage: /clickOnBlocks
