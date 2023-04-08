@@ -18,7 +18,6 @@ import com.sk89q.worldedit.function.mask.MaskIntersection;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.request.Request;
 import com.sk89q.worldedit.util.Location;
-import de.eldoria.schematicbrush.brush.SchematicBrush;
 
 public class CustomBrushToolWrapper extends BrushTool {
 
