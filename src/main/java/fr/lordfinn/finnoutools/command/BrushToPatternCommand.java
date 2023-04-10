@@ -1,4 +1,4 @@
-package fr.lordfinn.finnoutools;
+package fr.lordfinn.finnoutools.command;
 
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;

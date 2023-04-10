@@ -1,4 +1,4 @@
-package fr.lordfinn.finnoutools;
+package fr.lordfinn.finnoutools.command;
 
 import com.fastasyncworldedit.core.command.tool.brush.BrushSettings;
 import com.fastasyncworldedit.core.configuration.Caption;

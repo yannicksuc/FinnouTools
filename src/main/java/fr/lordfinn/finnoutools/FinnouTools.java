@@ -1,23 +1,16 @@
 package fr.lordfinn.finnoutools;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
+import fr.lordfinn.finnoutools.command.BrushToPatternCommand;
+import fr.lordfinn.finnoutools.command.GiveInvisibleFrameCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 public final class FinnouTools extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        registerCommand("brushToPattern", new BrushToPatternCommand());
-        getCommand("giveinvisibleframe").setExecutor(new GiveInvisibleFrameCommand());
-    }
-
-    private void registerCommand(String commandName, CommandExecutor executor) {
-        PluginCommand command = getCommand(commandName);
-        if (command != null) {
-            command.setExecutor(executor);
-        } else {
-            getLogger().warning("The command \"" + commandName + "\" was not correctly registered in plugin.yml.");
-        }
+        Objects.requireNonNull(getCommand("giveInvisibleFrame")).setExecutor(new GiveInvisibleFrameCommand());
+        Objects.requireNonNull(getCommand("brushToPattern")).setExecutor(new BrushToPatternCommand());
     }
 
     @Override

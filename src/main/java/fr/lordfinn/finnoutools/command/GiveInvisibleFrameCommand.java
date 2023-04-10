@@ -1,4 +1,4 @@
-package fr.lordfinn.finnoutools;
+package fr.lordfinn.finnoutools.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
