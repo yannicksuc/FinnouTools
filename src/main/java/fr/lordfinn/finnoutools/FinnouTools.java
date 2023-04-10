@@ -8,6 +8,7 @@ public final class FinnouTools extends JavaPlugin {
     @Override
     public void onEnable() {
         registerCommand("brushToPattern", new BrushToPatternCommand());
+        getCommand("giveinvisibleframe").setExecutor(new GiveInvisibleFrameCommand());
     }
 
     private void registerCommand(String commandName, CommandExecutor executor) {
