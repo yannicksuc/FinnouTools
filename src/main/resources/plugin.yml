@@ -9,3 +9,12 @@ commands:
   giveInvisibleFrame:
     description: Gives the player an invisible item frame.
     usage: /giveInvisibleFrame
+  model:
+    description: "Description de la commande model"
+    usage: "/model"
+  modeladd:
+    description: "Description de la commande modeladd"
+    usage: "/modeladd"
+  modeledit:
+    description: "Description de la commande modeledit"
+    usage: "/modeledit"
