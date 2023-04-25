@@ -12,9 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static fr.lordfinn.finnoutools.utils.HeadUtil.arePlayerHeadsSimilar;
@@ -23,14 +21,14 @@ public class CustomGUI implements Listener {
 
     private final FinnouTools plugin;
     private final int size;
-    private String title;
+    private Component title;
     private final HashMap<Integer, ModelGUIItem> items;
     private Inventory modelInventory;
 
     private Player player;
 
 
-    public CustomGUI(FinnouTools plugin, int size, String title) {
+    public CustomGUI(FinnouTools plugin, int size, Component title) {
         this.plugin = plugin;
         this.size = size;
         this.title = title;
@@ -51,8 +49,7 @@ public class CustomGUI implements Listener {
     }
 
     public void open(Player player) {
-        Component titleComponent = Component.text(this.title, NamedTextColor.DARK_PURPLE);
-        modelInventory = Bukkit.createInventory(player, this.size, titleComponent);
+        modelInventory = Bukkit.createInventory(player, this.size, this.title);
 
         for (Map.Entry<Integer, ModelGUIItem> entry : items.entrySet()) {
             int slot = entry.getKey();

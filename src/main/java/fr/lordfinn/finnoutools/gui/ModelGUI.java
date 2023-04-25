@@ -5,6 +5,9 @@ import fr.lordfinn.finnoutools.command.ModelGUICommand;
 import fr.lordfinn.finnoutools.models.CustomItem;
 import fr.lordfinn.finnoutools.models.CustomItemManager;
 import fr.lordfinn.finnoutools.utils.Heads;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,9 +35,12 @@ public class ModelGUI {
             page = 1;
         }
 
-        CustomGUI gui = new CustomGUI(plugin, 54,"Custom Items - Page " + page);
         int startIndex = (page - 1) * itemsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage, customItems.size());
+        Component titleComponent = Component.text("Custom Items ", NamedTextColor.DARK_RED)
+                .append(Component.text(page, NamedTextColor.DARK_GRAY))
+                .append(Component.text("/"+ totalPages, NamedTextColor.GRAY));
+        CustomGUI gui = new CustomGUI(plugin, 54,titleComponent);
 
         for (int i = startIndex; i < endIndex; i++) {
             CustomItem customItem = customItems.get(i);
