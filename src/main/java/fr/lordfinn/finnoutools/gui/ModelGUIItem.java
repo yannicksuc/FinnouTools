@@ -10,18 +10,25 @@ import java.util.List;
 public class ModelGUIItem {
 
     private final ItemStack itemStack;
-    private final Action action;
+    private final Action rightAction;
+    private final Action leftAction;
 
+    public ModelGUIItem(ItemStack itemStack, Action leftAction, Action rightAction) {
+        this.itemStack = itemStack;
+        this.leftAction = leftAction;
+        this.rightAction = rightAction;
+    }
+    public ModelGUIItem(Material material, String displayName, List<String> lore, Action leftAction, Action rightAction) {
+        this(createItemStack(material, displayName, lore), leftAction, rightAction);
+    }
     public ModelGUIItem(Material material, String displayName, List<String> lore, Action action) {
-        this.itemStack = createItemStack(material, displayName, lore);
-        this.action = action;
+        this(material, displayName, lore, action, action);
     }
     public ModelGUIItem(ItemStack itemStack, Action action) {
-        this.itemStack = itemStack;
-        this.action = action;
+        this(itemStack, action, action);
     }
 
-    private ItemStack createItemStack(Material material, String displayName, List<String> lore) {
+    private static ItemStack createItemStack(Material material, String displayName, List<String> lore) {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
 
@@ -41,8 +48,16 @@ public class ModelGUIItem {
         return itemStack;
     }
 
-    public Action getAction() {
-        return action;
+    public Action getMainAction() {
+        return this.getleftAction();
+    }
+
+    public Action getleftAction() {
+        return leftAction;
+    }
+
+    public Action getRightAction() {
+        return rightAction;
     }
 
     public interface Action {

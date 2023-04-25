@@ -74,8 +74,9 @@ public class CustomGUI implements Listener {
             return;
         event.setCancelled(true);
         for (ModelGUIItem item : items.values()) {
-            if (item.getItemStack() != null && areItemsSimilar(item.getItemStack(), clickedItem) && item.getAction() != null) {
-                item.getAction().run((Player) event.getWhoClicked());
+            if (item.getItemStack() != null && areItemsSimilar(item.getItemStack(), clickedItem) && item.getMainAction() != null) {
+                ModelGUIItem.Action action = event.isLeftClick() ? item.getleftAction() : item.getRightAction();
+                action.run((Player) event.getWhoClicked());
                 return;
             }
         }
