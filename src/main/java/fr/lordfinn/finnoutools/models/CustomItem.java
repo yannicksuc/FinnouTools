@@ -80,7 +80,6 @@ public class CustomItem {
 
     public ItemStack toItemStack() {
         Material material = Material.getMaterial(itemNamespace);
-        System.out.println(itemNamespace);
         ItemStack item = new ItemStack(material == null ? Material.BARRIER : material);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
