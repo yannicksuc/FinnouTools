@@ -4,23 +4,10 @@ import fr.lordfinn.finnoutools.FinnouTools;
 import fr.lordfinn.finnoutools.command.ModelGUICommand;
 import fr.lordfinn.finnoutools.models.CustomItem;
 import fr.lordfinn.finnoutools.models.CustomItemManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import fr.lordfinn.finnoutools.utils.Heads;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ModelGUI {
@@ -55,15 +42,13 @@ public class ModelGUI {
             gui.addItem(new ModelGUIItem(itemStack, new ModelGUICommand.GiveAction(itemStack)));
         }
 
-//        // Ajouter les éléments spéciaux
-//        ItemStack nextPageItem = ... // Créez l'item pour aller à la page suivante
-//        ItemStack prevPageItem = ... // Créez l'item pour aller à la page précédente
-//        ItemStack changeDisplayModeItem = ... // Créez l'item pour changer le mode d'affichage
-//
-//        gui.setItem(52, nextPageItem);
-//        gui.setItem(45, prevPageItem);
-//        gui.setItem(53, changeDisplayModeItem);
+        // Ajouter les éléments spéciaux
+        ModelGUIItem nextPageItem = new ModelGUIItem(Heads.RIGHT_ARROW.getItemStack(), new NextPageAction(this, page));
+        ModelGUIItem prevPageItem = new ModelGUIItem(Heads.LEFT_ARROW.getItemStack(), new PrevPageAction(this, page));
+        gui.addItem(nextPageItem, 53);
+        gui.addItem(prevPageItem, 52);
 
         gui.open(player);
     }
+
 }

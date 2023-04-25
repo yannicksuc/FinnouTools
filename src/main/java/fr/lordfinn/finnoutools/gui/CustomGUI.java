@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static fr.lordfinn.finnoutools.utils.HeadUtil.arePlayerHeadsSimilar;
+
 public class CustomGUI implements Listener {
 
     private final FinnouTools plugin;
@@ -75,10 +77,34 @@ public class CustomGUI implements Listener {
             return;
         event.setCancelled(true);
         for (ModelGUIItem item : items.values()) {
-            if (item.getItemStack().equals(clickedItem)) {
+            if (item.getItemStack() != null && areItemsSimilar(item.getItemStack(), clickedItem) && item.getAction() != null) {
                 item.getAction().run((Player) event.getWhoClicked());
                 return;
             }
         }
+    }
+
+    public boolean areItemsSimilar(ItemStack item1, ItemStack item2) {
+        if (item1 == null || item2 == null) {
+            return false;
+        }
+
+        if (item1.getType() != item2.getType()) {
+            return false;
+        }
+
+        if (!item1.hasItemMeta() || !item2.hasItemMeta()) {
+            return false;
+        }
+
+        if (item1.getType() == Material.PLAYER_HEAD) {
+            return arePlayerHeadsSimilar(item1, item2);
+        } else {
+            return item1.isSimilar(item2);
+        }
+    }
+
+    public void addItem(ItemStack nextPageItem, int slot) {
+        addItem(new ModelGUIItem(nextPageItem, null), slot);
     }
 }

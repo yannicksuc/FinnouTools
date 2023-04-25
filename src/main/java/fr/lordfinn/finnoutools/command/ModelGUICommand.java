@@ -28,11 +28,9 @@ public class ModelGUICommand implements SubCommand  {
 
     public static class GiveAction implements ModelGUIItem.Action {
         private final ItemStack item;
-
         public GiveAction(ItemStack item) {
             this.item = item;
         }
-
         @Override
         public void run(Player player) {
             player.getInventory().addItem(item.clone());

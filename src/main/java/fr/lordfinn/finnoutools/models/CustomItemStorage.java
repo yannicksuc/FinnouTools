@@ -53,12 +53,12 @@ public class CustomItemStorage {
     }
 
     private CustomItem createCustomItemFromSection(ConfigurationSection itemSection) {
-        String itemNamespace = itemSection.getString("item_namespace");
-        int customModelData = itemSection.getInt("custom_model_data");
-        String name = itemSection.getString("name");
-        String type = itemSection.getString("type");
-        String project = itemSection.getString("project");
-        String description = itemSection.getString("description");
+        String itemNamespace = itemSection.getString("item_namespace", "").toUpperCase();
+        int customModelData = itemSection.getInt("custom_model_data", 0);
+        String name = itemSection.getString("name", "");
+        String type = itemSection.getString("type", "");
+        String project = itemSection.getString("project", "");
+        String description = itemSection.getString("description", "");
 
         return new CustomItem(itemNamespace, customModelData, name, type, project, description);
     }
