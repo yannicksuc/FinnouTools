@@ -5,6 +5,7 @@ package fr.lordfinn.finnoutools.command;
         import org.bukkit.command.Command;
         import org.bukkit.command.CommandExecutor;
         import org.bukkit.command.CommandSender;
+        import org.jetbrains.annotations.NotNull;
 
         import java.util.HashMap;
         import java.util.Map;
@@ -14,13 +15,13 @@ public class ModelCommand implements CommandExecutor {
 
     public ModelCommand(FinnouTools finnouTools, CustomItemManager customItemManager) {
         subCommands = new HashMap<>();
-        subCommands.put("gui", new ModelGUICommand(customItemManager));
-        subCommands.put("add", new ModelAddCommand(customItemManager));
-        subCommands.put("set", new ModelEditCommand(customItemManager));
+        subCommands.put("gui", new ModelGUICommand(finnouTools, customItemManager));
+     //   subCommands.put("add", new ModelAddCommand(customItemManager));
+     //   subCommands.put("set", new ModelEditCommand(customItemManager));
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) {
             // Aucune sous-commande spécifiée, affichez l'aide
             return false;

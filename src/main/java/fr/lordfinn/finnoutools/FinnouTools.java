@@ -24,8 +24,8 @@ public final class FinnouTools extends JavaPlugin {
         Objects.requireNonNull(getCommand("giveInvisibleFrame")).setExecutor(new GiveInvisibleFrameCommand());
         Objects.requireNonNull(getCommand("brushToPattern")).setExecutor(new BrushToPatternCommand());
         Objects.requireNonNull(getCommand("model")).setExecutor(new ModelCommand(this, customItemManager));
-        Objects.requireNonNull(getCommand("modeladd")).setExecutor(new ModelAddCommand(customItemManager));
-        Objects.requireNonNull(getCommand("modeledit")).setExecutor(new ModelEditCommand(customItemManager));
+        //Objects.requireNonNull(getCommand("modeladd")).setExecutor(new ModelAddCommand(customItemManager));
+        //Objects.requireNonNull(getCommand("modeledit")).setExecutor(new ModelEditCommand(customItemManager));
     }
 
     @Override

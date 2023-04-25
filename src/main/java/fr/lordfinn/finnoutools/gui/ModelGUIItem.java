@@ -10,12 +10,14 @@ import java.util.List;
 public class ModelGUIItem {
 
     private final ItemStack itemStack;
-    private final int slot;
     private final Action action;
 
-    public ModelGUIItem(Material material, String displayName, List<String> lore, int slot, Action action) {
+    public ModelGUIItem(Material material, String displayName, List<String> lore, Action action) {
         this.itemStack = createItemStack(material, displayName, lore);
-        this.slot = slot;
+        this.action = action;
+    }
+    public ModelGUIItem(ItemStack itemStack, Action action) {
+        this.itemStack = itemStack;
         this.action = action;
     }
 
@@ -32,12 +34,11 @@ public class ModelGUIItem {
         return itemStack;
     }
 
+
+    
+
     public ItemStack getItemStack() {
         return itemStack;
-    }
-
-    public int getSlot() {
-        return slot;
     }
 
     public Action getAction() {

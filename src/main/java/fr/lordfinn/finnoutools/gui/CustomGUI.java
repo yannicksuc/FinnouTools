@@ -13,14 +13,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomGUI implements Listener {
 
     private final FinnouTools plugin;
     private final int size;
     private String title;
-    private final List<ModelGUIItem> items;
+    private final HashMap<Integer, ModelGUIItem> items;
     private Inventory modelInventory;
 
     private Player player;
@@ -30,21 +32,30 @@ public class CustomGUI implements Listener {
         this.plugin = plugin;
         this.size = size;
         this.title = title;
-        this.items = new ArrayList<>();
+        this.items = new HashMap<Integer, ModelGUIItem>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
     }
 
+    public void addItem(ModelGUIItem item, int slot) {
+        items.put(slot, item);
+    }
     public void addItem(ModelGUIItem item) {
-        items.add(item);
+        int slot = 0;
+        while (items.containsKey(slot)) {
+            slot++;
+        }
+        items.put(slot, item);
     }
 
     public void open(Player player) {
         Component titleComponent = Component.text(this.title, NamedTextColor.DARK_PURPLE);
         modelInventory = Bukkit.createInventory(player, this.size, titleComponent);
 
-        for (ModelGUIItem item : items) {
-            modelInventory.setItem(item.getSlot(), item.getItemStack());
+        for (Map.Entry<Integer, ModelGUIItem> entry : items.entrySet()) {
+            int slot = entry.getKey();
+            ModelGUIItem item = entry.getValue();
+            modelInventory.setItem(slot, item.getItemStack());
         }
 
         player.openInventory(modelInventory);
@@ -55,13 +66,15 @@ public class CustomGUI implements Listener {
         if (!(event.getWhoClicked() instanceof Player))
             return;
         Player player = (Player) event.getWhoClicked();
-        if (!event.getInventory().getViewers().contains(player))
+        Inventory clickedInventory = event.getClickedInventory();
+        if (clickedInventory == null || !clickedInventory.equals(modelInventory) || !clickedInventory.getViewers().contains(player)) {
             return;
-        event.setCancelled(true);
+        }
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() == Material.AIR)
             return;
-        for (ModelGUIItem item : items) {
+        event.setCancelled(true);
+        for (ModelGUIItem item : items.values()) {
             if (item.getItemStack().equals(clickedItem)) {
                 item.getAction().run((Player) event.getWhoClicked());
                 return;

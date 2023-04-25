@@ -1,6 +1,7 @@
 package fr.lordfinn.finnoutools.gui;
 
 import fr.lordfinn.finnoutools.FinnouTools;
+import fr.lordfinn.finnoutools.command.ModelGUICommand;
 import fr.lordfinn.finnoutools.models.CustomItem;
 import fr.lordfinn.finnoutools.models.CustomItemManager;
 import net.kyori.adventure.text.Component;
@@ -24,19 +25,24 @@ import java.util.List;
 
 public class ModelGUI {
     private FinnouTools plugin;
-    private CustomItemManager customItemManager;
+    private CustomItemManager itemManager;
     public ModelGUI(FinnouTools plugin, CustomItemManager customItemManager) {
         this.plugin = plugin;
+        this.itemManager = customItemManager;
     }
 
 
     public void openGUI(Player player, int page, boolean displayMode) {
-        List<CustomItem> customItems = this.customItemManager.getCustomItems();
+        List<CustomItem> customItems = this.itemManager.getCustomItems();
         int itemsPerPage = 45;
         int totalPages = (int) Math.ceil(customItems.size() / (double) itemsPerPage);
 
         if (page > totalPages) {
             page = totalPages;
+        }
+
+        if (page <= 0) {
+            page = 1;
         }
 
         CustomGUI gui = new CustomGUI(plugin, 54,"Custom Items - Page " + page);
@@ -46,27 +52,18 @@ public class ModelGUI {
         for (int i = startIndex; i < endIndex; i++) {
             CustomItem customItem = customItems.get(i);
             ItemStack itemStack = customItem.toItemStack();
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            if (itemMeta != null) {
-                List<String> lore = new ArrayList<>();
-                lore.add(ChatColor.YELLOW + "Custom Model Data: " + customItem.getCustomModelData());
-                lore.add(ChatColor.YELLOW + "Type: " + customItem.getType());
-                lore.add(ChatColor.YELLOW + "Project: " + customItem.getProject());
-                itemMeta.setLore(lore);
-                itemStack.setItemMeta(itemMeta);
-            }
-            inventory.addItem(itemStack);
+            gui.addItem(new ModelGUIItem(itemStack, new ModelGUICommand.GiveAction(itemStack)));
         }
 
-        // Ajouter les éléments spéciaux
-        ItemStack nextPageItem = ... // Créez l'item pour aller à la page suivante
-        ItemStack prevPageItem = ... // Créez l'item pour aller à la page précédente
-        ItemStack changeDisplayModeItem = ... // Créez l'item pour changer le mode d'affichage
+//        // Ajouter les éléments spéciaux
+//        ItemStack nextPageItem = ... // Créez l'item pour aller à la page suivante
+//        ItemStack prevPageItem = ... // Créez l'item pour aller à la page précédente
+//        ItemStack changeDisplayModeItem = ... // Créez l'item pour changer le mode d'affichage
+//
+//        gui.setItem(52, nextPageItem);
+//        gui.setItem(45, prevPageItem);
+//        gui.setItem(53, changeDisplayModeItem);
 
-        inventory.setItem(52, nextPageItem);
-        inventory.setItem(45, prevPageItem);
-        inventory.setItem(53, changeDisplayModeItem);
-
-        player.openInventory(inventory);
+        gui.open(player);
     }
 }
