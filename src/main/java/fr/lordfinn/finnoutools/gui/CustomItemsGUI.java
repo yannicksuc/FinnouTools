@@ -1,24 +1,23 @@
 package fr.lordfinn.finnoutools.gui;
 
 import fr.lordfinn.finnoutools.FinnouTools;
-import fr.lordfinn.finnoutools.command.ModelGUICommand;
-import fr.lordfinn.finnoutools.models.CustomItem;
-import fr.lordfinn.finnoutools.models.CustomItemManager;
+import fr.lordfinn.finnoutools.command.CustomItemsGUICommand;
+import fr.lordfinn.finnoutools.customitems.CustomItem;
+import fr.lordfinn.finnoutools.customitems.CustomItemsManager;
 import fr.lordfinn.finnoutools.utils.Heads;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class ModelGUI {
+public class CustomItemsGUI {
     private FinnouTools plugin;
-    private CustomItemManager itemManager;
-    public ModelGUI(FinnouTools plugin, CustomItemManager customItemManager) {
+    private CustomItemsManager itemManager;
+    public CustomItemsGUI(FinnouTools plugin, CustomItemsManager customItemsManager) {
         this.plugin = plugin;
-        this.itemManager = customItemManager;
+        this.itemManager = customItemsManager;
     }
 
 
@@ -40,17 +39,16 @@ public class ModelGUI {
         Component titleComponent = Component.text("Custom Items ", NamedTextColor.DARK_RED)
                 .append(Component.text(page, NamedTextColor.DARK_GRAY))
                 .append(Component.text("/"+ totalPages, NamedTextColor.GRAY));
-        CustomGUI gui = new CustomGUI(plugin, 54,titleComponent);
+        InteractiveGUIBase gui = new InteractiveGUIBase(plugin, 54,titleComponent);
 
         for (int i = startIndex; i < endIndex; i++) {
             CustomItem customItem = customItems.get(i);
             ItemStack itemStack = customItem.toItemStack();
-            gui.addItem(new ModelGUIItem(itemStack, new ModelGUICommand.GiveAction(itemStack)));
+            gui.addItem(new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.GiveAction(itemStack)));
         }
 
-        // Ajouter les éléments spéciaux
-        ModelGUIItem nextPageItem = new ModelGUIItem(Heads.RIGHT_ARROW.getItemStack(), new NextPageAction(this, page));
-        ModelGUIItem prevPageItem = new ModelGUIItem(Heads.LEFT_ARROW.getItemStack(), new PrevPageAction(this, page));
+        CustomItemsGUIItem nextPageItem = new CustomItemsGUIItem(Heads.RIGHT_ARROW.getItemStack(), new NextPageAction(this, page));
+        CustomItemsGUIItem prevPageItem = new CustomItemsGUIItem(Heads.LEFT_ARROW.getItemStack(), new PrevPageAction(this, page));
         gui.addItem(nextPageItem, 53);
         gui.addItem(prevPageItem, 52);
 

@@ -2,17 +2,17 @@ package fr.lordfinn.finnoutools.gui;
 
 import org.bukkit.entity.Player;
 
-public class PrevPageAction implements ModelGUIItem.Action {
-    private final ModelGUI modelGUI;
+public class PrevPageAction implements CustomItemsGUIItem.Action {
+    private final CustomItemsGUI customItemsGUI;
     private final int currentPage;
 
-    public PrevPageAction(ModelGUI modelGUI, int currentPage) {
-        this.modelGUI = modelGUI;
+    public PrevPageAction(CustomItemsGUI customItemsGUI, int currentPage) {
+        this.customItemsGUI = customItemsGUI;
         this.currentPage = currentPage;
     }
 
     @Override
     public void run(Player player) {
-        modelGUI.openGUI(player, currentPage - 1, false);
+        customItemsGUI.openGUI(player, currentPage - 1, false);
     }
 }

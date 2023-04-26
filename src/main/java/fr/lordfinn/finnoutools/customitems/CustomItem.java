@@ -1,4 +1,4 @@
-package fr.lordfinn.finnoutools.models;
+package fr.lordfinn.finnoutools.customitems;
 
 import fr.lordfinn.finnoutools.utils.TextUtil;
 import net.kyori.adventure.text.Component;

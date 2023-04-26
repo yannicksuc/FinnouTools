@@ -1,14 +1,14 @@
-package fr.lordfinn.finnoutools.models;
+package fr.lordfinn.finnoutools.customitems;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CustomItemManager {
+public class CustomItemsManager {
     private final List<CustomItem> customItems;
-     private final CustomItemStorage storage;
+     private final CustomItemsStorage storage;
 
-    public CustomItemManager(CustomItemStorage customItemStorage) {
-        storage = customItemStorage;
+    public CustomItemsManager(CustomItemsStorage customItemsStorage) {
+        storage = customItemsStorage;
         customItems = storage.loadCustomItemsFromConfig();
     }
 

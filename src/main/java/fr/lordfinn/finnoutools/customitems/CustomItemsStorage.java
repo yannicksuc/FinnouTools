@@ -1,4 +1,4 @@
-package fr.lordfinn.finnoutools.models;
+package fr.lordfinn.finnoutools.customitems;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class CustomItemStorage {
+public class CustomItemsStorage {
     private final JavaPlugin plugin;
     private final File configFile;
     private final FileConfiguration config;
 
-    public CustomItemStorage(JavaPlugin plugin) {
+    public CustomItemsStorage(JavaPlugin plugin) {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "custom_items.yml");
         if (!configFile.exists()) {

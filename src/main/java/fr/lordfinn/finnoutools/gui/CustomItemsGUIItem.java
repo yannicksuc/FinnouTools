@@ -7,24 +7,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-public class ModelGUIItem {
+public class CustomItemsGUIItem {
 
     private final ItemStack itemStack;
     private final Action rightAction;
     private final Action leftAction;
 
-    public ModelGUIItem(ItemStack itemStack, Action leftAction, Action rightAction) {
+    public CustomItemsGUIItem(ItemStack itemStack, Action leftAction, Action rightAction) {
         this.itemStack = itemStack;
         this.leftAction = leftAction;
         this.rightAction = rightAction;
     }
-    public ModelGUIItem(Material material, String displayName, List<String> lore, Action leftAction, Action rightAction) {
+    public CustomItemsGUIItem(Material material, String displayName, List<String> lore, Action leftAction, Action rightAction) {
         this(createItemStack(material, displayName, lore), leftAction, rightAction);
     }
-    public ModelGUIItem(Material material, String displayName, List<String> lore, Action action) {
+    public CustomItemsGUIItem(Material material, String displayName, List<String> lore, Action action) {
         this(material, displayName, lore, action, action);
     }
-    public ModelGUIItem(ItemStack itemStack, Action action) {
+    public CustomItemsGUIItem(ItemStack itemStack, Action action) {
         this(itemStack, action, action);
     }
 

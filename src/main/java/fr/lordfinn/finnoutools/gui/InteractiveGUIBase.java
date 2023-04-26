@@ -2,7 +2,6 @@ package fr.lordfinn.finnoutools.gui;
 
 import fr.lordfinn.finnoutools.FinnouTools;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,30 +16,30 @@ import java.util.Map;
 
 import static fr.lordfinn.finnoutools.utils.HeadUtil.arePlayerHeadsSimilar;
 
-public class CustomGUI implements Listener {
+public class InteractiveGUIBase implements Listener {
 
     private final FinnouTools plugin;
     private final int size;
     private Component title;
-    private final HashMap<Integer, ModelGUIItem> items;
+    private final HashMap<Integer, CustomItemsGUIItem> items;
     private Inventory modelInventory;
 
     private Player player;
 
 
-    public CustomGUI(FinnouTools plugin, int size, Component title) {
+    public InteractiveGUIBase(FinnouTools plugin, int size, Component title) {
         this.plugin = plugin;
         this.size = size;
         this.title = title;
-        this.items = new HashMap<Integer, ModelGUIItem>();
+        this.items = new HashMap<Integer, CustomItemsGUIItem>();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
     }
 
-    public void addItem(ModelGUIItem item, int slot) {
+    public void addItem(CustomItemsGUIItem item, int slot) {
         items.put(slot, item);
     }
-    public void addItem(ModelGUIItem item) {
+    public void addItem(CustomItemsGUIItem item) {
         int slot = 0;
         while (items.containsKey(slot)) {
             slot++;
@@ -51,9 +50,9 @@ public class CustomGUI implements Listener {
     public void open(Player player) {
         modelInventory = Bukkit.createInventory(player, this.size, this.title);
 
-        for (Map.Entry<Integer, ModelGUIItem> entry : items.entrySet()) {
+        for (Map.Entry<Integer, CustomItemsGUIItem> entry : items.entrySet()) {
             int slot = entry.getKey();
-            ModelGUIItem item = entry.getValue();
+            CustomItemsGUIItem item = entry.getValue();
             modelInventory.setItem(slot, item.getItemStack());
         }
 
@@ -73,9 +72,9 @@ public class CustomGUI implements Listener {
         if (clickedItem == null || clickedItem.getType() == Material.AIR)
             return;
         event.setCancelled(true);
-        for (ModelGUIItem item : items.values()) {
+        for (CustomItemsGUIItem item : items.values()) {
             if (item.getItemStack() != null && areItemsSimilar(item.getItemStack(), clickedItem) && item.getMainAction() != null) {
-                ModelGUIItem.Action action = event.isLeftClick() ? item.getleftAction() : item.getRightAction();
+                CustomItemsGUIItem.Action action = event.isLeftClick() ? item.getleftAction() : item.getRightAction();
                 action.run((Player) event.getWhoClicked());
                 return;
             }
@@ -103,6 +102,6 @@ public class CustomGUI implements Listener {
     }
 
     public void addItem(ItemStack nextPageItem, int slot) {
-        addItem(new ModelGUIItem(nextPageItem, null), slot);
+        addItem(new CustomItemsGUIItem(nextPageItem, null), slot);
     }
 }
