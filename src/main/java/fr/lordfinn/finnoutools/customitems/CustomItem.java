@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomItem {
-    private String itemNamespace;
+    private String material;
     private int customModelData;
     private String name;
     private String type;
     private String project;
     private String description;
 
-    public CustomItem(String itemNamespace, int customModelData, String name, String type, String project, String description) {
-        this.itemNamespace = itemNamespace;
+    public CustomItem(String material, int customModelData, String name, String type, String project, String description) {
+        this.material = material;
         this.customModelData = customModelData;
         this.name = name;
         this.type = type;
@@ -30,12 +30,12 @@ public class CustomItem {
         this.description = description;
     }
 
-    public String getItemNamespace() {
-        return itemNamespace;
+    public String getMaterial() {
+        return material;
     }
 
-    public void setItemNamespace(String itemNamespace) {
-        this.itemNamespace = itemNamespace;
+    public void setMaterial(String material) {
+        this.material = material;
     }
 
     public int getCustomModelData() {
@@ -79,7 +79,7 @@ public class CustomItem {
     }
 
     public ItemStack toItemStack() {
-        Material material = Material.getMaterial(itemNamespace);
+        Material material = Material.getMaterial(this.material);
         ItemStack item = new ItemStack(material == null ? Material.BARRIER : material);
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {

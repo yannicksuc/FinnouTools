@@ -1,5 +1,8 @@
 package fr.lordfinn.finnoutools.customitems;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -16,41 +19,56 @@ public class CustomItemsManager {
         customItems.add(customItem);
     }
 
-    public Optional<CustomItem> getCustomItem(String itemNamespace, int customModelData) {
+    public Optional<CustomItem> getCustomItem(String material, int customModelData) {
         return customItems.stream()
-                .filter(item -> item.getItemNamespace().equalsIgnoreCase(itemNamespace) && item.getCustomModelData() == customModelData)
+                .filter(item -> item.getMaterial().equalsIgnoreCase(material) && item.getCustomModelData() == customModelData)
                 .findFirst();
     }
 
-    public void editCustomItem(String itemNamespace, int customModelData, String field, String newValue) {
-        Optional<CustomItem> customItemOptional = getCustomItem(itemNamespace, customModelData);
+    public Integer getIndex(CustomItem customItem) {
+        return customItems.indexOf(customItem);
+    }
 
-        if (!customItemOptional.isPresent()) {
-            return;
+//    public void editCustomItem(String material, int customModelData, String field, String newValue) {
+//        Optional<CustomItem> customItemOptional = this.getCustomItem(material, customModelData);
+//        if (customItemOptional.isEmpty()) {
+//            throw new IllegalArgumentException("The specified customItem wasn't found.");
+//            return;
+//        }
+//        CustomItem customItem = customItemOptional.get();
+//        editCustomItem(customItem, field, newValue);
+//    }
+
+    public void editCustomItem(CustomItem customItem, String field, String newValue) {
+        Integer customItemIndex = this.getIndex(customItem);
+        if (customItemIndex < 0) {
+            throw new IllegalArgumentException("The specified customItem wasn't found.");
         }
-        CustomItem customItem = customItemOptional.get();
+
         switch (field.toLowerCase()) {
-            case "type":
-                customItem.setType(newValue);
-                break;
-            case "item_namespace":
-                customItem.setItemNamespace(newValue);
-                break;
-            case "custom_model_data":
-                customItem.setCustomModelData(Integer.parseInt(newValue));
-                break;
-            case "project":
-                customItem.setProject(newValue);
-                break;
-            case "description":
-                customItem.setDescription(newValue);
-                break;
-            case "name":
-                customItem.setName(newValue);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid field specified.");
+            case "type" -> customItem.setType(newValue);
+            case "material" -> {
+                Material newMaterial = Material.matchMaterial(newValue);
+                if (newMaterial == null) {
+                    throw new IllegalArgumentException(ChatColor.RED + "The specified new material does not exist.");
+                }
+                customItem.setMaterial(newValue);
+            }
+            case "custom_model_data" -> {
+                int newCustomModelData;
+                try {
+                    newCustomModelData = Integer.parseInt(newValue);
+                    customItem.setCustomModelData(newCustomModelData);
+                } catch (NumberFormatException e) {
+                    throw new IllegalArgumentException("The specified new custom_model_data is invalid.");
+                }
+            }
+            case "project" -> customItem.setProject(newValue);
+            case "description" -> customItem.setDescription(newValue);
+            case "name" -> customItem.setName(newValue);
+            default -> throw new IllegalArgumentException("Invalid field specified.");
         }
+        customItems.set(customItemIndex, customItem);
         this.storage.saveCustomItemsToConfig(customItems);
     }
 

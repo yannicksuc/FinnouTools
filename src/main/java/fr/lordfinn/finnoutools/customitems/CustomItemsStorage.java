@@ -53,14 +53,14 @@ public class CustomItemsStorage {
     }
 
     private CustomItem createCustomItemFromSection(ConfigurationSection itemSection) {
-        String itemNamespace = itemSection.getString("item_namespace", "").toUpperCase();
+        String material = itemSection.getString("material", "").toUpperCase();
         int customModelData = itemSection.getInt("custom_model_data", 0);
         String name = itemSection.getString("name", "");
         String type = itemSection.getString("type", "");
         String project = itemSection.getString("project", "");
         String description = itemSection.getString("description", "");
 
-        return new CustomItem(itemNamespace, customModelData, name, type, project, description);
+        return new CustomItem(material, customModelData, name, type, project, description);
     }
 
     public void saveCustomItemsToConfig(List<CustomItem> customItems) {
@@ -76,7 +76,7 @@ public class CustomItemsStorage {
     }
 
     private void saveCustomItemToSection(CustomItem customItem, ConfigurationSection itemSection) {
-        itemSection.set("item_namespace", customItem.getItemNamespace());
+        itemSection.set("material", customItem.getMaterial());
         itemSection.set("custom_model_data", customItem.getCustomModelData());
         itemSection.set("name", customItem.getName());
         itemSection.set("type", customItem.getType());

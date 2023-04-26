@@ -11,5 +11,5 @@ commands:
     usage: /giveInvisibleFrame
   customItems:
     description: "Add/Read/Edit/Delete your custom items"
-    usage: /customitems
+    usage: /customItems
     aliases: [ci]

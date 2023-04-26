@@ -9,6 +9,7 @@ package fr.lordfinn.finnoutools.command;
         import org.jetbrains.annotations.NotNull;
         import org.jetbrains.annotations.Nullable;
 
+        import java.util.Arrays;
         import java.util.HashMap;
         import java.util.List;
         import java.util.Map;
@@ -52,7 +53,7 @@ public class CustomItemsCommand implements CommandExecutor, TabCompleter {
         }
         SubCommand subCommand = subCommands.get(args[0].toLowerCase());
         if (subCommand != null) {
-            return subCommand.onTabComplete(commandSender, command, alias, args);
+            return subCommand.onTabComplete(commandSender, command, alias, Arrays.copyOfRange(args, 1, args.length));
         }
         return null;
     }
