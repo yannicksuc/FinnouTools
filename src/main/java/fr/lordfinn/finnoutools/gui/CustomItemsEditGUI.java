@@ -50,7 +50,7 @@ public class CustomItemsEditGUI {
                     this.cancel(); // Cancel the task if the inventory is not being viewed
                 } else {
                     CustomItemsGUIItem itemStack = createItemStack(getTypeMaterial(typeIndex), "Type", customItem.getType(),  customItem, "type");
-                    gui.addItem(itemStack.getItemStack(), 29);
+                    gui.addItem(itemStack, 29);
                     this.typeIndex+=1;
                 }
             }
@@ -71,7 +71,7 @@ public class CustomItemsEditGUI {
         itemMeta.displayName(Component.text(displayName, NamedTextColor.GOLD));
         itemMeta.lore(createWrappedComponent(lore, 25, NamedTextColor.GRAY));
         itemStack.setItemMeta(itemMeta);
-        return new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.EditAction(customItem, action));
+        return new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.EditAction(customItem, action, this.plugin));
     }
 
     private Material getTypeMaterial(int index) {
