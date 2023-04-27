@@ -75,4 +75,9 @@ public class CustomItemsManager {
     public List<CustomItem> getCustomItems() {
         return customItems;
     }
+
+    public void deleteCustomItem(CustomItem customItem) {
+        customItems.remove(customItem);
+        storage.saveCustomItemsToConfig(customItems);
+    }
 }

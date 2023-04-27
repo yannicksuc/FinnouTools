@@ -1,6 +1,5 @@
 package fr.lordfinn.finnoutools.gui;
 
-import fr.lordfinn.finnoutools.FinnouTools;
 import fr.lordfinn.finnoutools.command.CustomItemsGUICommand;
 import fr.lordfinn.finnoutools.customitems.CustomItem;
 import fr.lordfinn.finnoutools.customitems.CustomItemsManager;
@@ -12,16 +11,17 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static fr.lordfinn.finnoutools.utils.TextUtil.createWrappedComponent;
 import static fr.lordfinn.finnoutools.utils.TextUtil.truncateStringIgnoringFormatting;
 
 public class CustomItemsEditGUI {
-    private FinnouTools plugin;
+    private final Plugin plugin;
     private final CustomItemsManager itemManager;
 
-    public CustomItemsEditGUI(FinnouTools plugin, CustomItemsManager itemManager) {
+    public CustomItemsEditGUI(Plugin plugin, CustomItemsManager itemManager) {
         this.plugin = plugin;
         this.itemManager = itemManager;
     }
@@ -33,13 +33,15 @@ public class CustomItemsEditGUI {
         InteractiveGUIBase gui = new InteractiveGUIBase(plugin, 54, titleComponent);
 
         gui.addItem(createItemStack(customItem.toItemStack().getType(), "Material", customItem.toItemStack().getType().toString(), customItem, "material"), 11);
-        gui.addItem(createItemStack(Material.WRITABLE_BOOK, "CustomModelData", String.valueOf(customItem.getCustomModelData()), customItem, "custommodeldata"),13);
-        gui.addItem(createItemStack(Material.NAME_TAG, "Nom", customItem.getName(),  customItem, "name"),15);
+        gui.addItem(createItemStack(Material.WRITABLE_BOOK, "CustomModelData", String.valueOf(customItem.getCustomModelData()), customItem, "custom_model_data"),13);
+        gui.addItem(createItemStack(Material.NAME_TAG, "Name", customItem.getName(),  customItem, "name"),15);
         gui.addItem(createItemStack(getTypeMaterial(0), "Type", customItem.getType(),  customItem, "type"),29);
-        gui.addItem(createItemStack(Material.NETHERITE_PICKAXE, "Projet", customItem.getProject(), customItem, "project"), 31);
+        gui.addItem(createItemStack(Material.NETHERITE_PICKAXE, "Project", customItem.getProject(), customItem, "project"), 31);
         gui.addItem(createItemStack(Material.PAPER, "Description", customItem.getDescription(), customItem, "description"), 33);
 
-        gui.addItem(createBackItemStack(), 49);
+        gui.addItem(createDeleteItemStack(customItem), 49);
+
+        gui.addItem(createBackItemStack(), 53);
 
         gui.open(player);
         new BukkitRunnable() {
@@ -65,17 +67,24 @@ public class CustomItemsEditGUI {
         return new CustomItemsGUIItem(itemStack, new GoBackGUIAction(this.plugin, this.itemManager));
     }
 
+    private CustomItemsGUIItem createDeleteItemStack(CustomItem customItem) {
+        ItemStack itemStack = new ItemStack(Material.BARRIER);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.displayName(Component.text("Delete", NamedTextColor.RED));
+        itemStack.setItemMeta(itemMeta);
+        return new CustomItemsGUIItem(itemStack, new DeleteAction(customItem, this.plugin, this, itemManager));
+    }
+
     private CustomItemsGUIItem createItemStack(Material material, String displayName, String lore, CustomItem customItem, String action) {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.displayName(Component.text(displayName, NamedTextColor.GOLD));
         itemMeta.lore(createWrappedComponent(lore, 25, NamedTextColor.GRAY));
         itemStack.setItemMeta(itemMeta);
-        return new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.EditAction(customItem, action, this.plugin));
+        return new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.EditAction(customItem, action, this.plugin, itemManager, this));
     }
 
     private Material getTypeMaterial(int index) {
-        System.out.println(index);
         Material[] materials = {Material.LEATHER_HELMET, Material.STICK, Material.OAK_PLANKS};
         return materials[index % 3];
     }

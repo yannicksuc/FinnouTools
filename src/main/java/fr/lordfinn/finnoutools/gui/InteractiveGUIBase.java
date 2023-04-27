@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ import static fr.lordfinn.finnoutools.utils.HeadUtil.arePlayerHeadsSimilar;
 
 public class InteractiveGUIBase implements Listener {
 
-    private final FinnouTools plugin;
+    private final Plugin plugin;
     private final int size;
     private Component title;
     private final HashMap<Integer, CustomItemsGUIItem> items;
@@ -27,7 +28,7 @@ public class InteractiveGUIBase implements Listener {
     private Player player;
 
 
-    public InteractiveGUIBase(FinnouTools plugin, int size, Component title) {
+    public InteractiveGUIBase(Plugin plugin, int size, Component title) {
         this.plugin = plugin;
         this.size = size;
         this.title = title;

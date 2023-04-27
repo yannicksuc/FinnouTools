@@ -1,6 +1,5 @@
 package fr.lordfinn.finnoutools.gui;
 
-import fr.lordfinn.finnoutools.FinnouTools;
 import fr.lordfinn.finnoutools.command.CustomItemsGUICommand;
 import fr.lordfinn.finnoutools.customitems.CustomItem;
 import fr.lordfinn.finnoutools.customitems.CustomItemsManager;
@@ -9,21 +8,22 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
 public class CustomItemsGUI {
-    private FinnouTools plugin;
+    private Plugin plugin;
     private CustomItemsManager itemManager;
     private CustomItemsEditGUI customItemsEditGUI;
-    public CustomItemsGUI(FinnouTools plugin, CustomItemsManager customItemsManager) {
+    public CustomItemsGUI(Plugin plugin, CustomItemsManager customItemsManager) {
         this.plugin = plugin;
         this.itemManager = customItemsManager;
         this.customItemsEditGUI = new CustomItemsEditGUI(plugin, itemManager);
     }
 
 
-    public void openGUI(Player player, int page, boolean displayMode) {
+    public void openGUI(Player player, int page) {
         List<CustomItem> customItems = this.itemManager.getCustomItems();
         int itemsPerPage = 45;
         int totalPages = (int) Math.ceil(customItems.size() / (double) itemsPerPage);

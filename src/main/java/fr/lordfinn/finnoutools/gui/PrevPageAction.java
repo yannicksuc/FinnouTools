@@ -13,6 +13,6 @@ public class PrevPageAction implements CustomItemsGUIItem.Action {
 
     @Override
     public void run(Player player) {
-        customItemsGUI.openGUI(player, currentPage - 1, false);
+        customItemsGUI.openGUI(player, currentPage - 1);
     }
 }
