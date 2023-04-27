@@ -74,6 +74,10 @@
             <id>minecraft-repo</id>
             <url>https://libraries.minecraft.net/</url>
         </repository>
+        <repository>
+            <id>codemc-snapshots</id>
+            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -101,11 +105,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
-            <groupId>de.eldoria</groupId>
-            <artifactId>schematicbrushreborn-api</artifactId>
-            <version>2.5.0</version>
+            <groupId>io.github.rysefoxx.anvilgui</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.6.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>

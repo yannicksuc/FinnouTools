@@ -127,4 +127,17 @@ public class CustomItem {
                 .append(Component.text(valueText, valueColor)
                         .style(style -> style.decoration(TextDecoration.ITALIC, true)));
     }
+
+    public String getValueByFieldName(String field) {
+        return switch (field.toLowerCase()) {
+            case "material" -> getMaterial();
+            case "custom_model_data" -> String.valueOf(getCustomModelData());
+            case "name" -> getName();
+            case "type" -> getType();
+            case "project" -> getProject();
+            case "description" -> getDescription();
+            default -> throw new IllegalArgumentException("Invalid field specified.");
+        };
+    }
+
 }
