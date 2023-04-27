@@ -4,6 +4,7 @@ import fr.lordfinn.finnoutools.FinnouTools;
 import fr.lordfinn.finnoutools.command.CustomItemsGUICommand;
 import fr.lordfinn.finnoutools.customitems.CustomItem;
 import fr.lordfinn.finnoutools.customitems.CustomItemsManager;
+import fr.lordfinn.finnoutools.utils.Heads;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -57,7 +58,7 @@ public class CustomItemsEditGUI {
     }
 
     private CustomItemsGUIItem createBackItemStack() {
-        ItemStack itemStack = new ItemStack(Material.BARRIER);
+        ItemStack itemStack = Heads.RIGHT_ARROW.getItemStack();
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.displayName(Component.text("Back", NamedTextColor.RED));
         itemStack.setItemMeta(itemMeta);
