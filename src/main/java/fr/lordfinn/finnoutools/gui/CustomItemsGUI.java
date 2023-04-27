@@ -15,9 +15,11 @@ import java.util.List;
 public class CustomItemsGUI {
     private FinnouTools plugin;
     private CustomItemsManager itemManager;
+    private CustomItemsEditGUI customItemsEditGUI;
     public CustomItemsGUI(FinnouTools plugin, CustomItemsManager customItemsManager) {
         this.plugin = plugin;
         this.itemManager = customItemsManager;
+        this.customItemsEditGUI = new CustomItemsEditGUI(plugin, itemManager);
     }
 
 
@@ -44,7 +46,8 @@ public class CustomItemsGUI {
         for (int i = startIndex; i < endIndex; i++) {
             CustomItem customItem = customItems.get(i);
             ItemStack itemStack = customItem.toItemStack();
-            gui.addItem(new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.GiveAction(itemStack)));
+            OpenEditGUIAction openEditGUIAction = new OpenEditGUIAction(customItemsEditGUI, customItem);
+            gui.addItem(new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.GiveAction(itemStack), openEditGUIAction));
         }
 
         CustomItemsGUIItem nextPageItem = new CustomItemsGUIItem(Heads.RIGHT_ARROW.getItemStack(), new NextPageAction(this, page));

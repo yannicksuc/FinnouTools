@@ -3,73 +3,79 @@ package fr.lordfinn.finnoutools.gui;
 import fr.lordfinn.finnoutools.FinnouTools;
 import fr.lordfinn.finnoutools.command.CustomItemsGUICommand;
 import fr.lordfinn.finnoutools.customitems.CustomItem;
+import fr.lordfinn.finnoutools.customitems.CustomItemsManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
+import static fr.lordfinn.finnoutools.utils.TextUtil.createWrappedComponent;
+import static fr.lordfinn.finnoutools.utils.TextUtil.truncateStringIgnoringFormatting;
 
 public class CustomItemsEditGUI {
     private FinnouTools plugin;
-    public CustomItemsEditGUI(FinnouTools plugin) {
+    private final CustomItemsManager itemManager;
+
+    public CustomItemsEditGUI(FinnouTools plugin, CustomItemsManager itemManager) {
         this.plugin = plugin;
+        this.itemManager = itemManager;
     }
+
     public void openGUI(Player player, CustomItem customItem) {
-        Component titleComponent = Component.text("Edit Custom Item ", NamedTextColor.DARK_RED)
-                .append(Component.text(customItem.getName(), NamedTextColor.WHITE));
+        Component titleComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(truncateStringIgnoringFormatting(customItem.getName(),20, true))
+                .append(Component.text(" > ", NamedTextColor.DARK_GRAY))
+                .append(Component.text("Edit", NamedTextColor.GRAY));
         InteractiveGUIBase gui = new InteractiveGUIBase(plugin, 54, titleComponent);
 
-        // Ajouter un item pour le type
-        ItemStack typeItemStack = new ItemStack(Material.ANVIL);
-        ItemMeta typeItemMeta = typeItemStack.getItemMeta();
-        typeItemMeta.displayName(Component.text("Type", NamedTextColor.GOLD));
-        typeItemMeta.lore(Collections.singletonList(Component.text(customItem.getType(), NamedTextColor.GRAY)));
-        typeItemStack.setItemMeta(typeItemMeta);
-        gui.addItem(new CustomItemsGUIItem(typeItemStack, new CustomItemsGUICommand.EditAction(customItem, "type")), 10);
+        gui.addItem(createItemStack(customItem.toItemStack().getType(), "Material", customItem.toItemStack().getType().toString(), customItem, "material"), 11);
+        gui.addItem(createItemStack(Material.WRITABLE_BOOK, "CustomModelData", String.valueOf(customItem.getCustomModelData()), customItem, "custommodeldata"),13);
+        gui.addItem(createItemStack(Material.NAME_TAG, "Nom", customItem.getName(),  customItem, "name"),15);
+        gui.addItem(createItemStack(getTypeMaterial(0), "Type", customItem.getType(),  customItem, "type"),29);
+        gui.addItem(createItemStack(Material.NETHERITE_PICKAXE, "Projet", customItem.getProject(), customItem, "project"), 31);
+        gui.addItem(createItemStack(Material.PAPER, "Description", customItem.getDescription(), customItem, "description"), 33);
 
-        // Ajouter un item pour le nom
-        ItemStack nameItemStack = new ItemStack(Material.NAME_TAG);
-        ItemMeta nameItemMeta = nameItemStack.getItemMeta();
-        nameItemMeta.displayName(Component.text("Nom", NamedTextColor.GOLD));
-        nameItemMeta.lore(Collections.singletonList(Component.text(customItem.getName(), NamedTextColor.GRAY)));
-        nameItemStack.setItemMeta(nameItemMeta);
-        gui.addItem(new CustomItemsGUIItem(nameItemStack, new CustomItemsGUICommand.EditAction(customItem, "name")), 12);
-
-        // Ajouter un item pour le custommodeldata
-        ItemStack cmdItemStack = new ItemStack(Material.WRITABLE_BOOK);
-        ItemMeta cmdItemMeta = cmdItemStack.getItemMeta();
-        cmdItemMeta.displayName(Component.text("CustomModelData", NamedTextColor.GOLD));
-        cmdItemMeta.lore(Collections.singletonList(Component.text(customItem.getCustomModelData(), NamedTextColor.GRAY)));
-        cmdItemStack.setItemMeta(cmdItemMeta);
-        gui.addItem(new CustomItemsGUIItem(cmdItemStack, new CustomItemsGUICommand.EditAction(customItem, "custommodeldata")), 14);
-
-        // Ajouter un item pour le material
-        ItemStack materialItemStack = customItem.toItemStack();
-        ItemMeta materialItemMeta = materialItemStack.getItemMeta();
-        materialItemMeta.displayName(Component.text("Material", NamedTextColor.GOLD));
-        materialItemMeta.lore(Collections.singletonList(Component.text(materialItemStack.getType().toString(), NamedTextColor.GRAY)));
-        materialItemStack.setItemMeta(materialItemMeta);
-        gui.addItem(new CustomItemsGUIItem(materialItemStack, new CustomItemsGUICommand.EditAction(customItem, "material")), 16);
-
-        // Ajouter un item pour la description
-        ItemStack descriptionItemStack = new ItemStack(Material.PAPER);
-        ItemMeta descriptionItemMeta = descriptionItemStack.getItemMeta();
-        descriptionItemMeta.displayName(Component.text("Description", NamedTextColor.GOLD));
-        descriptionItemMeta.lore(Collections.singletonList(Component.text(customItem.getDescription(), NamedTextColor.GRAY)));
-        descriptionItemStack.setItemMeta(descriptionItemMeta);
-        gui.addItem(new CustomItemsGUIItem(descriptionItemStack, new CustomItemsGUICommand.EditAction(customItem, "description")), 28);
-
-        // Ajouter un item pour le projet
-        ItemStack projectItemStack = new ItemStack(Material.MAP);
-        ItemMeta projectItemMeta = projectItemStack.getItemMeta();
-        projectItemMeta.displayName(Component.text("Projet", NamedTextColor.GOLD));
-        projectItemMeta.lore(Collections.singletonList(Component.text(customItem.getProject(), NamedTextColor.GRAY)));
-        projectItemStack.setItemMeta(projectItemMeta);
-        gui.addItem(new CustomItemsGUIItem(projectItemStack, new CustomItemsGUICommand.EditAction(customItem, "project")), 30);
+        gui.addItem(createBackItemStack(), 49);
 
         gui.open(player);
+        new BukkitRunnable() {
+            static int typeIndex = 0;
+            @Override
+            public void run() {
+                if (gui.isViewed()) {
+                    this.cancel(); // Cancel the task if the inventory is not being viewed
+                } else {
+                    CustomItemsGUIItem itemStack = createItemStack(getTypeMaterial(typeIndex), "Type", customItem.getType(),  customItem, "type");
+                    gui.addItem(itemStack.getItemStack(), 29);
+                    this.typeIndex+=1;
+                }
+            }
+        }.runTaskTimer(plugin, 0, 50);
+    }
+
+    private CustomItemsGUIItem createBackItemStack() {
+        ItemStack itemStack = new ItemStack(Material.BARRIER);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.displayName(Component.text("Back", NamedTextColor.RED));
+        itemStack.setItemMeta(itemMeta);
+        return new CustomItemsGUIItem(itemStack, new GoBackGUIAction(this.plugin, this.itemManager));
+    }
+
+    private CustomItemsGUIItem createItemStack(Material material, String displayName, String lore, CustomItem customItem, String action) {
+        ItemStack itemStack = new ItemStack(material);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.displayName(Component.text(displayName, NamedTextColor.GOLD));
+        itemMeta.lore(createWrappedComponent(lore, 25, NamedTextColor.GRAY));
+        itemStack.setItemMeta(itemMeta);
+        return new CustomItemsGUIItem(itemStack, new CustomItemsGUICommand.EditAction(customItem, action));
+    }
+
+    private Material getTypeMaterial(int index) {
+        System.out.println(index);
+        Material[] materials = {Material.LEATHER_HELMET, Material.STICK, Material.OAK_PLANKS};
+        return materials[index % 3];
     }
 }

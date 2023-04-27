@@ -13,6 +13,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.lordfinn.finnoutools.utils.TextUtil.createWrappedComponent;
+
 public class CustomItem {
     private String material;
     private int customModelData;
@@ -116,7 +118,7 @@ public class CustomItem {
         lore.add(createLoreComponent("☸ Type: ", type,                            NamedTextColor.DARK_AQUA, NamedTextColor.AQUA));
         lore.add(createLoreComponent("⛏ Project: ", project,                      NamedTextColor.DARK_GREEN, NamedTextColor.GREEN));
         lore.add(Component.text(""));
-        lore.addAll(createWrappedDescription());
+        lore.addAll(createWrappedComponent(description, 25, NamedTextColor.GRAY));
         return lore;
     }
 
@@ -124,9 +126,5 @@ public class CustomItem {
         return Component.text(labelText, labelColor)
                 .append(Component.text(valueText, valueColor)
                         .style(style -> style.decoration(TextDecoration.ITALIC, true)));
-    }
-
-    private List<Component> createWrappedDescription() {
-        return TextUtil.wrapText(description, 25, NamedTextColor.GRAY);
     }
 }

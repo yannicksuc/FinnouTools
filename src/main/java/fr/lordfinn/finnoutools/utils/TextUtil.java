@@ -78,4 +78,43 @@ public class TextUtil {
         }
         return null;
     }
+
+    public static List<Component> createWrappedComponent(String text, int maxSize, NamedTextColor color) {
+        return TextUtil.wrapText(text, maxSize, color);
+    }
+
+    public static String truncateStringIgnoringFormatting(String input, int maxLength, boolean doAddEllipsis) {
+        String withoutFormatting = input.replaceAll("§[0-9a-fA-Fk-oK-OrR]", "");
+        if (withoutFormatting.length() <= maxLength) {
+            return input;
+        }
+
+        StringBuilder truncated = new StringBuilder();
+        int visibleCharCount = 0;
+        int i = 0;
+
+        while (visibleCharCount < maxLength && i < input.length()) {
+            char currentChar = input.charAt(i);
+            if (currentChar == '§') {
+                if (i + 1 < input.length()) {
+                    char nextChar = input.charAt(i + 1);
+                    if (isColorCode(nextChar)) {
+                        truncated.append(currentChar).append(nextChar);
+                        i += 2;
+                        continue;
+                    }
+                }
+            }
+
+            truncated.append(currentChar);
+            visibleCharCount++;
+            i++;
+        }
+
+        return truncated + (doAddEllipsis ? "..." : "");
+    }
+
+    private static boolean isColorCode(char c) {
+        return "0123456789aAbBcCdDeEfFkKlLmMnNoOrR".indexOf(c) != -1;
+    }
 }

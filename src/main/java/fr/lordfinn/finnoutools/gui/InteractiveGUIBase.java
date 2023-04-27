@@ -22,7 +22,7 @@ public class InteractiveGUIBase implements Listener {
     private final int size;
     private Component title;
     private final HashMap<Integer, CustomItemsGUIItem> items;
-    private Inventory modelInventory;
+    private Inventory modelInventory = null;
 
     private Player player;
 
@@ -37,26 +37,30 @@ public class InteractiveGUIBase implements Listener {
     }
 
     public void addItem(CustomItemsGUIItem item, int slot) {
+
         items.put(slot, item);
+        if (this.modelInventory != null)
+            this.modelInventory.setItem(slot, item.getItemStack());
     }
     public void addItem(CustomItemsGUIItem item) {
         int slot = 0;
-        while (items.containsKey(slot)) {
+        while (this.items.containsKey(slot)) {
             slot++;
         }
-        items.put(slot, item);
+        this.items.put(slot, item);
     }
 
-    public void open(Player player) {
-        modelInventory = Bukkit.createInventory(player, this.size, this.title);
+    public Inventory open(Player player) {
+        this.modelInventory = Bukkit.createInventory(player, this.size, this.title);
 
-        for (Map.Entry<Integer, CustomItemsGUIItem> entry : items.entrySet()) {
+        for (Map.Entry<Integer, CustomItemsGUIItem> entry : this.items.entrySet()) {
             int slot = entry.getKey();
             CustomItemsGUIItem item = entry.getValue();
-            modelInventory.setItem(slot, item.getItemStack());
+            this.modelInventory.setItem(slot, item.getItemStack());
         }
 
-        player.openInventory(modelInventory);
+        player.openInventory(this.modelInventory);
+        return this.modelInventory;
     }
 
     @EventHandler
@@ -65,7 +69,7 @@ public class InteractiveGUIBase implements Listener {
             return;
         Player player = (Player) event.getWhoClicked();
         Inventory clickedInventory = event.getClickedInventory();
-        if (clickedInventory == null || !clickedInventory.equals(modelInventory) || !clickedInventory.getViewers().contains(player)) {
+        if (clickedInventory == null || !clickedInventory.equals(this.modelInventory) || !clickedInventory.getViewers().contains(player)) {
             return;
         }
         ItemStack clickedItem = event.getCurrentItem();
@@ -103,5 +107,9 @@ public class InteractiveGUIBase implements Listener {
 
     public void addItem(ItemStack nextPageItem, int slot) {
         addItem(new CustomItemsGUIItem(nextPageItem, null), slot);
+    }
+
+    public boolean isViewed() {
+        return this.modelInventory.getViewers().isEmpty();
     }
 }
