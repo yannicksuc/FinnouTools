@@ -27,16 +27,16 @@ public class CustomItemsEditCommand implements SubCommand  {
             return true;
         }
 
-        if (args.length != 5) {
+        if (args.length != 4) {
             sender.sendMessage(ChatColor.RED + "Usage: /customItems edit [material] [custom_model_data] [field (material, custom_model_data, type, name, project, description)] [new_value]");
-            if (args.length > 5)
+            if (args.length > 4)
                 sender.sendMessage(ChatColor.GRAY + "Use quotes \"like this\" if your new_value needs spaces");
             return true;
         }
-        String materialName = args[1];
-        String customModelDataString = args[2];
-        String field = args[3];
-        String value = args[4];
+        String materialName = args[0];
+        String customModelDataString = args[1];
+        String field = args[2];
+        String value = args[3];
 
         Material material = Material.matchMaterial(materialName);
 

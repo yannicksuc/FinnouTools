@@ -22,7 +22,7 @@ public class CustomItemsCommand implements CommandExecutor, TabCompleter {
         subCommands = new HashMap<>();
         subCommands.put("gui", new CustomItemsGUICommand(finnouTools, customItemsManager));
         subCommands.put("edit", new CustomItemsEditCommand(customItemsManager));
-     //   subCommands.put("add", new ModelAddCommand(customItemManager));
+        subCommands.put("add", new CustomItemsAddCommand(customItemsManager, finnouTools));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CustomItemsCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        return subCommand.onCommand(sender, command, label, args);
+        return subCommand.onCommand(sender, command, label, Arrays.copyOfRange(args, 1, args.length));
     }
 
     @Override
