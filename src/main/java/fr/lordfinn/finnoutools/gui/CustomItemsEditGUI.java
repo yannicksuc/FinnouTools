@@ -58,7 +58,7 @@ public class CustomItemsEditGUI {
     }
 
     private CustomItemsGUIItem createBackItemStack() {
-        ItemStack itemStack = Heads.RIGHT_ARROW.getItemStack();
+        ItemStack itemStack = Heads.BACK_ARROW.getItemStack();
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.displayName(Component.text("Back", NamedTextColor.RED));
         itemStack.setItemMeta(itemMeta);
